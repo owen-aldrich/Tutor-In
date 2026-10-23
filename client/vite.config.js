@@ -1,0 +1,22 @@
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+export default defineConfig({
+  cacheDir: "../node_modules/.vite",
+  plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: { "@": path.resolve(__dirname, "src") },
+  },
+  server: {
+    port: 5173,
+    // Satu origin saat dev → cookie sesi berlaku tanpa masalah CORS.
+    proxy: {
+      "/api": { target: "http://localhost:4000", changeOrigin: true },
+    },
+  },
+});
